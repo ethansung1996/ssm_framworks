@@ -36,13 +36,13 @@ public class EmployeeMapperTest {
             sqlSession = getSqlSession();
             EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
             //1.查询
-           /* Employee emp = mapper.getEmpById(1);
-            System.out.println(emp);*/
+            Employee emp = mapper.getEmpById(1);
+            System.out.println(emp);
             //2.增加插入数据需要手动提交事务
-            Employee employee = new Employee(null,"insert","insert@atguigu.com","0");
+          /*  Employee employee = new Employee(null,"insert","insert@atguigu.com","0");
             mapper.addEmp(employee);
             System.out.println(employee);
-            System.out.println(employee.getId());
+            System.out.println(employee.getId());*/
 
             //3.修改更新数据
            /* Employee employee = new Employee(4,"ethan1","ethanUpdate@atguigu.com","1");
@@ -57,9 +57,23 @@ public class EmployeeMapperTest {
             sqlSession.close();
         }
 
-
-
-
     }
+
+    /**
+     * 测试dao层接口的方法的传参的理解
+     */
+    @Test
+    public void test02() throws IOException {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = getSqlSession();
+            EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
+            Employee tom = mapper.getEmpByIdAndLastName(1, "tom");
+            System.out.println(tom);
+        }finally {
+            sqlSession.close();
+        }
+    }
+
 
 }
