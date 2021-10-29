@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -70,6 +72,32 @@ public class EmployeeMapperTest {
             EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
             Employee tom = mapper.getEmpByIdAndLastName(1, "tom");
             System.out.println(tom);
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 测试select的返回数据如何封装
+     * @throws IOException
+     */
+    @Test
+    public void test03() throws IOException {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = getSqlSession();
+            EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
+            List<Employee> emps = mapper.getEmpsByLastNameLike("%n%");
+            for (Employee emp : emps) {
+                System.out.println(emp);
+            }
+            System.out.println("============================");
+            Map<String, Object> returnMap = mapper.getEmpByIdReturnMap(5);
+            System.out.println(returnMap);
+            System.out.println("============================");
+            Map<Integer, Employee> employeesMap = mapper.getEmpsReturnMap("%n%");
+            System.out.println(employeesMap);
+
         }finally {
             sqlSession.close();
         }
