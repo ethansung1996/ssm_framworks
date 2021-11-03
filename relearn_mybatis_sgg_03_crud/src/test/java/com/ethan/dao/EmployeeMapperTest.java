@@ -104,4 +104,28 @@ public class EmployeeMapperTest {
     }
 
 
+    /**
+     * 学习resultMap结果集映射的高级用法
+     * @throws IOException
+     */
+    @Test
+    public void test04() throws IOException {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = getSqlSession();
+            EmployeeMapperPlus mapper = sqlSession.getMapper(EmployeeMapperPlus.class);
+            Employee emp = mapper.getEmpById(1);
+            System.out.println(emp);
+            System.out.println("=============联合查询1===============");
+            Employee empAndDept = mapper.getEmpAndDeptById(9);
+            System.out.println(empAndDept);
+            System.out.println("=============联合查询2:分布查询===============");
+            Employee empByIdStep = mapper.getEmpByIdStep(9);
+            System.out.println(empByIdStep.getLastName());
+            System.out.println(empByIdStep.getDept());
+        }finally {
+            sqlSession.close();
+        }
+    }
+
 }

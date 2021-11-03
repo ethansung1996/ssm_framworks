@@ -3,9 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <settings>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
     <typeAliases>
         <package name="com.ethan.bean"/>
     </typeAliases>
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
@@ -19,5 +24,7 @@
     </environments>
     <mappers>
         <mapper resource="mappers/EmployeeMapper.xml"/>
+        <mapper resource="mappers/EmployeeMapperPlus.xml"/>
+        <mapper resource="mappers/DepartmentMapper.xml"/>
     </mappers>
 </configuration>
