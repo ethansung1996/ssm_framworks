@@ -1,5 +1,6 @@
 package com.ethan.dao;
 
+import com.ethan.bean.Department;
 import com.ethan.bean.Employee;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -123,6 +124,25 @@ public class EmployeeMapperTest {
             Employee empByIdStep = mapper.getEmpByIdStep(9);
             System.out.println(empByIdStep.getLastName());
             System.out.println(empByIdStep.getDept());
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 关联查询 collection
+     * @throws IOException
+     */
+    @Test
+    public void test05() throws IOException {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = getSqlSession();
+            DepartmentMapper mapper = sqlSession.getMapper(DepartmentMapper.class);
+            Department dept = mapper.getDeptById(2);
+            System.out.println(dept);
+            System.out.println(dept.getEmployees());
+
         }finally {
             sqlSession.close();
         }
