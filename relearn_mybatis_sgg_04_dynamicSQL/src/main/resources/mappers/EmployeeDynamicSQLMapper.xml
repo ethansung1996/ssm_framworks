@@ -5,6 +5,7 @@
 <mapper namespace="com.ethan.dao.EmployeeDynamicSQLMapper">
     <!--
         mysql下的第一种批量插入的方式
+        语法支持values(),(),()
     -->
    <!--
        <insert id="batchInsertEmpsByMysql" parameterType="Employee">
@@ -16,7 +17,9 @@
             </foreach>
         </insert>
     -->
-
+    <!--
+        mysql下的第二种批量插入的方式
+    -->
     <insert id="batchInsertEmpsByMysql" parameterType="Employee">
         <foreach collection="employeeList" item="emp" separator=";" close=";">
             insert into
@@ -25,5 +28,45 @@
             (#{emp.lastName},#{emp.email},#{emp.gender},#{emp.dept.id})
         </foreach>
     </insert>
+
+    <!--
+        oracle批量插入是不支持values(),(),()的语法的
+        oracle批量插入实现方式1：将多条插入语句放在begin end之间
+        oracle批量插入实现方式2：利用中间表
+        insert into employees(employee_id,last_name, email)
+        select employees_seq.nextval,lastName,email from(
+            select 'test01' lastName, 'test01@163.com' email from dual
+            union
+            select 'test02' lastName, 'test02@163.com' email from dual
+            union
+            select 'test03' lastName, 'test03@163.com' email from dual
+        )
+    -->
+    <!--
+        oracle批量插入方式1
+    -->
+    <insert id="batchInsertEmpsByOracle">
+        begin
+        <foreach collection="employeeList" item="emp">
+            insert into
+            tbl_employee(last_name, email, gender, dept_id)
+            VALUES
+            (#{emp.lastName},#{emp.email},#{emp.gender},#{emp.dept.id});
+        </foreach>
+        end;
+    </insert>
+    <!--
+            oracle批量插入方式2
+     -->
+   <!--
+       <insert id="batchInsertEmpsByOracle">
+            insert into employees(last_name, email,gender)
+            select lastName,email,gender from (
+            <foreach collection="employeeList" item="emp" separator="union" close=")">
+                select #{emp.lastName} lastName, #{emp.email} email, #{emp.gender} gender from dual
+            </foreach>
+        </insert>
+    -->
+
 
 </mapper>
