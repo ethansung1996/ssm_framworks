@@ -13,6 +13,7 @@
         <module>relearn_mybatis_sgg_01_helloWorld</module>
         <module>relearn_mybatis_sgg_02_config</module>
         <module>relearn_mybatis_sgg_03_crud</module>
+        <module>relearn_mybatis_sgg_04_dynamicSQL</module>
     </modules>
 
     <properties>

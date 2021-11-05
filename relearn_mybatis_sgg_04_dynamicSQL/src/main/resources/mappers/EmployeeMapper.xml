@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ethan.dao.EmployeeMapper">
+    <select id="getEmpById" resultType="com.ethan.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where id = #{id}
+    </select>
+
+    <select id="getEmpByIdAndLastName" resultType="Employee">
+        select id,last_name lastName,email,gender
+        from tbl_employee
+        where id = #{param1} and last_name = #{param2}
+    </select>
+
+    <!--<insert id="addEmp" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">-->
+    <!--    insert into tbl_employee(last_name, email, gender)-->
+    <!--    VALUES (#{lastName},#{email},#{gender})-->
+    <!--</insert>-->
+
+    <insert id="addEmp" parameterType="Employee">
+        <!--
+            keyProperty="id"：将查出来的主键值封装给JavaBean的哪个属性，示例是封装给Employee类的id属性
+            order="BEFORE"：指当前的sql是在插入sql之前还是之后执行，示例是在之前
+            resultType="Integer" 指查出来的数据的返回值是什么类型
+
+            所以整体的运行顺序就是：
+            1.先执行selectKey中的sql，查询出id的值并封装给JavaBean的id属性
+            2.再允许插入语句的sql，此时id属性的值已经存在。
+        -->
+        <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
+            <!--
+                1.熟悉下oracle的序列的语句和dual表
+                2.该语句就是获取EMPLOYEES_SEQ表的序列值
+            -->
+            select EMPLOYEES_SEQ.nextval from dual
+        </selectKey>
+        insert into tbl_employee(id,last_name, email, gender)
+        VALUES (#{id},#{lastName},#{email},#{gender})
+    </insert>
+
+    <update id="updateEmp">
+        update tbl_employee
+        set last_name = #{lastName},email = #{email},gender = #{gender}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmpById">
+        delete from tbl_employee where id=#{id}
+    </delete>
+
+    <select id="getEmpsByLastNameLike" resultType="Employee">
+        select id,last_name lastName,email,gender from tbl_employee where last_name like #{lastName}
+    </select>
+
+    <select id="getEmpByIdReturnMap" resultType="map">
+        select id,last_name lastName,email,gender
+        from tbl_employee
+        where id = #{id}
+    </select>
+
+    <select id="getEmpsReturnMap" resultType="Employee">
+        select id,last_name lastName,email,gender from tbl_employee where last_name like #{lastName}
+    </select>
+
+
+</mapper>
